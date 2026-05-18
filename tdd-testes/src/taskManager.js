@@ -4,7 +4,6 @@ export function resetId() {
     _nextId = 1;
 }
 
-
 export function validateTitle(title) {
     if (typeof title !== 'string') {
         return false;
@@ -19,4 +18,15 @@ export function createTask(title) {
         title: title.trim(),
         completed: false,
     };
+}
+
+export function addTask(tasks, title) {
+    if (!validateTitle(title)) {
+        throw new Error(
+        'Título inválido: deve ser uma string com pelo menos 3 caracteres.'
+        );
+    }
+
+    const newTask = createTask(title);
+    return [...tasks, newTask];
 }
