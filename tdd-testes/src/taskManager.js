@@ -28,6 +28,10 @@ export function addTask(tasks, title) {
         );
     }
 
+    if (isDuplicate(tasks, title)) {
+        throw new Error('Título duplicado: já existe uma tarefa com este nome.');
+    }
+
     const newTask = createTask(title);
     return [...tasks, newTask];
 }
@@ -74,4 +78,11 @@ export function validatePriority(priority) {
 
 export function filterByPriority(tasks, priority) {
     return tasks.filter((task) => task.priority === priority);
+}
+
+export function isDuplicate(tasks, title) {
+    if (!title || typeof title !== 'string') return false;
+
+    const cleanTitle = title.trim().toLowerCase();
+    return tasks.some((task) => task.title.trim().toLowerCase() === cleanTitle);
 }
