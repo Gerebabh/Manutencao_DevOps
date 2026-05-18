@@ -86,3 +86,7 @@ export function isDuplicate(tasks, title) {
     const cleanTitle = title.trim().toLowerCase();
     return tasks.some((task) => task.title.trim().toLowerCase() === cleanTitle);
 }
+
+export function sortTasks(tasks) {
+    return [...tasks].sort((a, b) => a.completed - b.completed);
+}
