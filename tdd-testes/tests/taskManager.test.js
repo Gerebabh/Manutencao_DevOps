@@ -11,6 +11,7 @@ import {
     countPending,
     validatePriority,
     filterByPriority,
+    isDuplicate,
     resetId,
 } from '../src/taskManager.js';
 
@@ -402,4 +403,41 @@ describe('filterByPriority', () => {
         const result = filterByPriority(tasks, 'high');
         expect(result).not.toBe(tasks);
     });
+});
+
+describe('isDuplicate', () => {
+    let tasks;
+
+    beforeEach(() => {
+        resetId();
+        tasks = [
+        { id: 1, title: 'Estudar Vitest', completed: false, priority: 'medium' }
+        ];
     });
+
+    it('deve retornar true se o título for idêntico', () => {
+        expect(isDuplicate(tasks, 'Estudar Vitest')).toBe(true);
+    });
+
+    it('deve retornar true ignorando maiúsculas e minúsculas (case-insensitive)', () => {
+        expect(isDuplicate(tasks, 'estudar vitest')).toBe(true);
+        expect(isDuplicate(tasks, 'ESTUDAR VITEST')).toBe(true);
+    });
+
+    it('deve retornar true ignorando espaços extras nas pontas', () => {
+        expect(isDuplicate(tasks, '  Estudar Vitest  ')).toBe(true);
+    });
+
+    it('deve retornar false se o título não existir na lista', () => {
+        expect(isDuplicate(tasks, 'Fazer café')).toBe(false);
+    });
+    });
+
+    describe('addTask com validação de duplicata', () => {
+    it('deve lançar erro ao tentar adicionar tarefa com título duplicado', () => {
+        const tasks = addTask([], 'Estudar TDD');
+
+        expect(() => addTask(tasks, 'Estudar TDD')).toThrow('Título duplicado');
+        expect(() => addTask(tasks, '  estudar tdd  ')).toThrow('Título duplicado');
+    });
+});
