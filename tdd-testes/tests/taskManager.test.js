@@ -12,6 +12,7 @@ import {
     validatePriority,
     filterByPriority,
     isDuplicate,
+    sortTasks,
     resetId,
 } from '../src/taskManager.js';
 
@@ -439,5 +440,39 @@ describe('isDuplicate', () => {
 
         expect(() => addTask(tasks, 'Estudar TDD')).toThrow('Título duplicado');
         expect(() => addTask(tasks, '  estudar tdd  ')).toThrow('Título duplicado');
+    });
+});
+
+describe('sortTasks', () => {
+    let tasks;
+
+    beforeEach(() => {
+        resetId();
+        tasks = [
+        { id: 1, title: 'T1', completed: true, priority: 'medium' },
+        { id: 2, title: 'T2', completed: false, priority: 'medium' },
+        { id: 3, title: 'T3', completed: true, priority: 'medium' },
+        { id: 4, title: 'T4', completed: false, priority: 'medium' },
+        ];
+    });
+
+    it('deve ordenar trazendo as tarefas pendentes primeiro', () => {
+        const sorted = sortTasks(tasks);
+
+        expect(sorted).toHaveLength(4);
+        expect(sorted[0].id).toBe(2); // Pendente original 1ª
+        expect(sorted[1].id).toBe(4); // Pendente original 2ª
+        expect(sorted[2].id).toBe(1); // Concluída original 1ª
+        expect(sorted[3].id).toBe(3); // Concluída original 2ª
+    });
+
+    it('deve retornar um array vazio se receber uma lista vazia', () => {
+        expect(sortTasks([])).toHaveLength(0);
+    });
+
+    it('deve retornar um NOVO array (imutabilidade)', () => {
+        const sorted = sortTasks(tasks);
+        expect(sorted).not.toBe(tasks);
+        expect(tasks[0].id).toBe(1); // Original intocado
     });
 });
