@@ -210,7 +210,7 @@ describe('removeTask', () => {
         const updated = removeTask(tasks, 1);
 
         expect(updated).not.toBe(tasks);
-        expect(tasks).toHaveLength(3); // original inalterado
+        expect(tasks).toHaveLength(3);
     });
 
     it('deve retornar a lista completa se o ID não existir', () => {
@@ -234,7 +234,6 @@ describe('filterTasks', () => {
         tasks = addTask([], 'Tarefa 1');
         tasks = addTask(tasks, 'Tarefa 2');
         tasks = addTask(tasks, 'Tarefa 3');
-        // Marca a segunda tarefa como concluída
         tasks = tasks.map((t) => (t.id === 2 ? toggleTask(t) : t));
     });
 
@@ -383,7 +382,6 @@ describe('filterByPriority', () => {
     beforeEach(() => {
         resetId();
         tasks = [];
-        // Adiciona tarefas com prioridades distintas simuladas
         tasks.push({ id: 1, title: 'T1', completed: false, priority: 'high' });
         tasks.push({ id: 2, title: 'T2', completed: false, priority: 'low' });
         tasks.push({ id: 3, title: 'T3', completed: false, priority: 'high' });
@@ -461,10 +459,10 @@ describe('sortTasks', () => {
         const sorted = sortTasks(tasks);
 
         expect(sorted).toHaveLength(4);
-        expect(sorted[0].id).toBe(2); // Pendente original 1ª
-        expect(sorted[1].id).toBe(4); // Pendente original 2ª
-        expect(sorted[2].id).toBe(1); // Concluída original 1ª
-        expect(sorted[3].id).toBe(3); // Concluída original 2ª
+        expect(sorted[0].id).toBe(2); 
+        expect(sorted[1].id).toBe(4); 
+        expect(sorted[2].id).toBe(1); 
+        expect(sorted[3].id).toBe(3); 
     });
 
     it('deve retornar um array vazio se receber uma lista vazia', () => {
@@ -474,7 +472,7 @@ describe('sortTasks', () => {
     it('deve retornar um NOVO array (imutabilidade)', () => {
         const sorted = sortTasks(tasks);
         expect(sorted).not.toBe(tasks);
-        expect(tasks[0].id).toBe(1); // Original intocado
+        expect(tasks[0].id).toBe(1);
     });
 });
 
@@ -492,7 +490,7 @@ describe('searchTasks', () => {
 
     it('deve encontrar tarefas que contenham o termo buscado', () => {
         const result = searchTasks(tasks, 'est');
-        expect(result).toHaveLength(2); // "Estudar Vitest" e "Testar aplicação"
+        expect(result).toHaveLength(2);
         expect(result[0].id).toBe(1);
         expect(result[1].id).toBe(2);
     });
