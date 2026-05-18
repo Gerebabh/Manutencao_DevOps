@@ -13,6 +13,7 @@ import {
     filterByPriority,
     isDuplicate,
     sortTasks,
+    searchTasks,
     resetId,
 } from '../src/taskManager.js';
 
@@ -474,5 +475,50 @@ describe('sortTasks', () => {
         const sorted = sortTasks(tasks);
         expect(sorted).not.toBe(tasks);
         expect(tasks[0].id).toBe(1); // Original intocado
+    });
+});
+
+describe('searchTasks', () => {
+    let tasks;
+
+    beforeEach(() => {
+        resetId();
+        tasks = [
+        { id: 1, title: 'Estudar Vitest', completed: false, priority: 'medium' },
+        { id: 2, title: 'Testar aplicação', completed: false, priority: 'medium' },
+        { id: 3, title: 'Fazer café', completed: false, priority: 'medium' },
+        ];
+    });
+
+    it('deve encontrar tarefas que contenham o termo buscado', () => {
+        const result = searchTasks(tasks, 'est');
+        expect(result).toHaveLength(2); // "Estudar Vitest" e "Testar aplicação"
+        expect(result[0].id).toBe(1);
+        expect(result[1].id).toBe(2);
+    });
+
+    it('deve funcionar independente de maiúsculas/minúsculas (case-insensitive)', () => {
+        const result = searchTasks(tasks, 'EST');
+        expect(result).toHaveLength(2);
+    });
+
+    it('deve retornar todas as tarefas se a busca for uma string vazia', () => {
+        const result = searchTasks(tasks, '');
+        expect(result).toHaveLength(3);
+    });
+
+    it('deve retornar array vazio se não encontrar nenhuma correspondência', () => {
+        const result = searchTasks(tasks, 'xyz');
+        expect(result).toHaveLength(0);
+    });
+
+    it('deve retornar array vazio se buscar em uma lista vazia', () => {
+        const result = searchTasks([], 'est');
+        expect(result).toHaveLength(0);
+    });
+
+    it('deve retornar um NOVO array (imutabilidade)', () => {
+        const result = searchTasks(tasks, 'café');
+        expect(result).not.toBe(tasks);
     });
 });
