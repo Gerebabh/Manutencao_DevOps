@@ -9,6 +9,8 @@ import {
     countTasks,
     countCompleted,
     countPending,
+    validatePriority,
+    filterByPriority,
     resetId,
 } from '../src/taskManager.js';
 
@@ -341,3 +343,63 @@ describe('countPending', () => {
         expect(countPending(allCompleted)).toBe(0);
     });
 });
+
+describe('validatePriority', () => {
+    it('deve retornar true para prioridades válidas', () => {
+        expect(validatePriority('low')).toBe(true);
+        expect(validatePriority('medium')).toBe(true);
+        expect(validatePriority('high')).toBe(true);
+    });
+
+    it('deve retornar false para prioridades inválidas', () => {
+        expect(validatePriority('urgente')).toBe(false);
+        expect(validatePriority('')).toBe(false);
+        expect(validatePriority(null)).toBe(false);
+    });
+});
+
+describe('createTask com Prioridade', () => {
+    beforeEach(() => {
+        resetId();
+    });
+
+    it('deve criar tarefa com prioridade explicitada', () => {
+        const task = createTask('Estudar Vitest', 'high');
+        expect(task).toHaveProperty('priority', 'high');
+    });
+
+    it('deve adotar prioridade "medium" como padrão', () => {
+        const task = createTask('Comprar café');
+        expect(task).toHaveProperty('priority', 'medium');
+    });
+});
+
+describe('filterByPriority', () => {
+    let tasks;
+
+    beforeEach(() => {
+        resetId();
+        tasks = [];
+        // Adiciona tarefas com prioridades distintas simuladas
+        tasks.push({ id: 1, title: 'T1', completed: false, priority: 'high' });
+        tasks.push({ id: 2, title: 'T2', completed: false, priority: 'low' });
+        tasks.push({ id: 3, title: 'T3', completed: false, priority: 'high' });
+    });
+
+    it('deve filtrar corretamente por prioridade', () => {
+        const highPriority = filterByPriority(tasks, 'high');
+        expect(highPriority).toHaveLength(2);
+        expect(highPriority[0].id).toBe(1);
+        expect(highPriority[1].id).toBe(3);
+    });
+
+    it('deve retornar um array vazio se não houver correspondência', () => {
+        const mediumPriority = filterByPriority(tasks, 'medium');
+        expect(mediumPriority).toHaveLength(0);
+    });
+
+    it('deve retornar um NOVO array (imutabilidade)', () => {
+        const result = filterByPriority(tasks, 'high');
+        expect(result).not.toBe(tasks);
+    });
+    });
