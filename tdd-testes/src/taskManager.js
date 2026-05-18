@@ -37,3 +37,7 @@ export function toggleTask(task) {
         completed: !task.completed,
     };
 }
+
+export function removeTask(tasks, taskId) {
+    return tasks.filter((task) => task.id !== taskId);
+}
