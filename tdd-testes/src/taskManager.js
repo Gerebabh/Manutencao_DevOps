@@ -90,3 +90,12 @@ export function isDuplicate(tasks, title) {
 export function sortTasks(tasks) {
     return [...tasks].sort((a, b) => a.completed - b.completed);
 }
+
+export function searchTasks(tasks, query) {
+    if (!query || query.trim() === '') {
+        return [...tasks];
+    }
+
+    const cleanQuery = query.toLowerCase();
+    return tasks.filter((task) => task.title.toLowerCase().includes(cleanQuery));
+}
