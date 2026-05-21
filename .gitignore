@@ -1,2 +1,22 @@
+# Dependências e Logs
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Relatórios de Testes (Jest)
 coverage/
+.nyc_output/
+
+# Arquivos do Sistema Operacional (Super importante!)
+.DS_Store
+Thumbs.db
+
+# Configurações do Editor de Código (Opcional, mas recomendado)
+.vscode/
+.idea/
+
+# Arquivos de Variáveis de Ambiente (Futuro)
+.env
+.env.local
