@@ -1,0 +1,31 @@
+services:
+  # Primeiro serviço como container frontend
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend
+    ports:
+      - 3000:3000
+  # Segundo Serviço como container de backend
+  backend:
+    depends_on:
+      - db
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidfly
+    command: ./docker-entrypoint.sh
+  # Terceiro serviço como container de banco de dados
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - vidfly:/data/db
+
+volumes:
+  vidfly:
+
+#PARA RODAR:
+#docker-compose up -d --build
