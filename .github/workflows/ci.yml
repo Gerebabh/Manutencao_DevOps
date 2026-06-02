@@ -14,6 +14,10 @@ on: #eventos de gatilho que diparam o workflow(pipeline)
 jobs: # define os trabalhos (jobs) que serao executados no workflow
   build: #nome do trabalho (job)
     runs-on: ubuntu-latest #especifica o ambiente de execucao (runner) do trabalho
+
+    defaults:
+      run:
+        working-directory: ./aula-pipeline
   
     strategy: # AGORA DENTRO DE BUILD: define a estragtegia de exeucao do trabalho (job)
       matrix: #define uma matriz de variaveis para executar o job em diferentes ambientes
